@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+<div class="col-md-8 col-md-offset-1">
+    <table class="table"> 
+        <thead> 
+            <tr> 
+                <th>{% trans 'DNI' %}</th> 
+                <th>{% trans 'Apellido' %}</th> 
+                <th>{% trans 'Nombre' %}</th>
+                <th>{% trans 'Email' %}</th>
+                <th>{% trans 'Monto' %}</th>
+                <th>{% trans 'Aprobada' %}</th> 
+                <th>{% trans 'Error' %}</th>
+                <th></th>
+                <th></th>
+            </tr> 
+        </thead>
+        <tbody>
+            {% for obj in object_list %}
+            <tr>
+                <th>{{ obj.document_number }}</th>
+                <th>{{ obj.surname }}</th>
+                <th>{{ obj.name }}</th>
+                <th>{{ obj.email }}</th>
+                <th>{{ obj.amount }}</th>
+                <th><span class="glyphicon {% if obj.approved %}glyphicon-ok-sign text-success{% else %}glyphicon glyphicon-remove-sign text-danger{% endif %}"></span></th>
+                <th style="vertical-align: middle;">{% if obj.error %}<span class="glyphicon glyphicon glyphicon-exclamation-sign text-danger"></span>{% endif %}</th>
+                <th><a  class="btn btn-default" href="{% url 'admin-edit' obj.pk %}">{% trans 'Editar' %}</a></th>
+                <th>
+                    <form action="{% url 'admin-delete' obj.pk %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-danger" value="{% trans 'Eliminar' %}" />
+                    </form>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
